@@ -26,6 +26,8 @@ pip install uvicorn  # ASGI server
 
 ```
 uvicorn main:app --reload
+# or you can specify the path to the main file
+uvicorn app.main:app --reload
 ```
 
 ### Uma vez que o básico de um app esteja de pé, podemos adicionar mais funcionalidades como as rotas
@@ -105,3 +107,35 @@ Sempre nomeamos as rotas com o plural do que estamos fazendo, e não com o verbo
 - Se tivermos uma rota que é `/users/me` e outra que é `/users/{user_id}`, o fastAPI vai tentar casar a rota com a primeira que ele encontrar, ou seja, se o usuário tentar acessar `/users/me`, o fastAPI vai tentar casar com a rota `/users/{user_id}` e não com a rota `/users/me`
 - Para resolver isso, podemos usar o `path` para especificar o tipo de dado que estamos esperando, por exemplo: `path: int` ou `path: str`
 - Sempre se antentar para garantir que as rotas estão na ordem correta para que o fastAPI consiga casar a rota corretamente 
+
+### O que são os CORS?
+
+- Cross-Origin Resource Sharing (CORS) é um mecanismo que usa cabeçalhos HTTP adicionais para informar a um navegador que permita que um aplicativo Web seja executado em um domínio (origem) com permissão para acessar recursos selecionados de um servidor em um domínio distinto  
+- O CORS é um mecanismo de segurança que permite que os recursos de uma página da web sejam solicitados a partir de outro domínio fora do domínio de origem
+- O CORS é uma especificação do W3C e faz parte das especificações do HTML5
+
+```
+# Devemos deixar as origens em um .env de preferência
+origins = [
+    "http://localhost",
+    "http://localhost:8000",
+    "http://localhost:3000",
+    "http://localhost:8080",
+    "https://myapp.herokuapp.com",
+]
+
+```
+
+
+```
+from fastapi.middleware.cors import CORSMiddleware
+
+# Add CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,  # allow all origins
+    allow_credentials=True,
+    allow_methods=["*"],  # allow all methods
+    allow_headers=["*"],  # allow all headers
+)
+```

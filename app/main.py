@@ -1,11 +1,23 @@
+import os
 from collections import OrderedDict
 from typing import Dict, Optional
 
+from dotenv import load_dotenv
 from fastapi import Body, FastAPI, HTTPException, Response, status
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
-app = FastAPI()
+load_dotenv()
+origins = os.getenv("ORIGINS").split(",")
 
+app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 # Fake database stored in memory
 vendas = OrderedDict(
     {
@@ -29,7 +41,7 @@ def get_vendas(id_venda: int):  # we need to inform the type of the parameter
     if not venda:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail="Venda com id {id_venda} não encontrada",
+            detail=f"Venda com id {id_venda} não encontrada",
         )
     return venda
 
