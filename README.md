@@ -139,3 +139,17 @@ app.add_middleware(
     allow_headers=["*"],  # allow all headers
 )
 ```
+
+### Sobre env e dependências
+
+Uma vez que todas as dependências estejam instaladas, podemos criar um arquivo `requirements.txt` para salvar todas as dependências do projeto. 
+
+``` 
+pip freeze > requirements.txt
+```
+
+E para instalar todas as dependências de um projeto, basta rodar o comando:
+
+```
+pip install -r requirements.txt
+```
