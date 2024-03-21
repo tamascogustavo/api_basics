@@ -153,3 +153,54 @@ E para instalar todas as dependências de um projeto, basta rodar o comando:
 ```
 pip install -r requirements.txt
 ```
+
+### Teste o coração do seu app e sua segurança
+
+- Testes são muito importantes para garantir que o seu app está funcionando corretamente
+- O fastAPI já vem com um sistema de testes embutido, que pode ser acessado em: `/docs` e clicando em `Try it out`
+- Podemos usar o `pytest` para fazer testes mais complexos
+- Podemos criar os testes no root do projeto, dentro de um folder chamado `tests` e em um arquivo chamado `test_main.py` e rodar o comando `pytest` para rodar os testes
+- Existem algumas convenções para criar os testes, por exemplo: `test_` no começo do nome do teste, `assert` para verificar se o teste passou ou não, etc. O mesmo para o nome das funções, por exemplo: `def test_read_main()`, `def test_read_main_invalid_token()`, etc.
+- testes por padrão não printam nada, a não ser que o teste falhe
+
+Para roda os testes, basta rodar o comando `pytest -v` no terminal.
+
+Para realizar mais de um teste, para cada função podemos usar @pytest.mark.parametrize para passar os valores que queremos testar. 
+
+``` 
+import pytest
+
+@pytest.mark.parametrize("test_input, expected", [
+    ("3+5", 8),
+    ("2+4", 6),
+    ("6*9", 42),
+])
+def test_eval(test_input, expected):
+    assert eval(test_input) == expected
+
+```
+Quando vamos iniciar algumas variáveis que vão ser usadas em vários testes, podemos usar o `setup` e `teardown` para inicializar e finalizar as variáveis. Também podemos utilizar o fixture para isso, que é uma função que vai ser executada antes e depois dos testes, e que pode ser usada em vários testes diferentes.  
+
+```
+import pytest
+
+@pytest.fixture
+def setup():
+    print("Setup")
+    yield
+    print("Teardown")
+
+```
+
+Em caso de warnings de Deprecation, podemos adicionar o seguinte código ao `pytest.ini`:
+
+```
+[pytest]
+filterwarnings =
+    ignore::DeprecationWarning
+```
+Para ativar o teste
+
+```
+pytest -v -s -x
+```
